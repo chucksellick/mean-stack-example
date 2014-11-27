@@ -10,5 +10,5 @@
   "scripts": {
     "start": "node server",
     "test": "mocha"
-  },
+  }
 }
