@@ -1,0 +1,14 @@
+{
+  "name": "sky-technical-test",
+  "description": "Sky technical test (Peter Hurst)",
+  "version": "0.0.1",
+  "author": "Peter Hurst <pete.hurst@gmail.com",
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.4.x"
+  },
+  "scripts": {
+    "start": "node server",
+    "test": "mocha"
+  },
+}
