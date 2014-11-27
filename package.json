@@ -16,5 +16,8 @@
     "express": "^4.10.4",
     "lodash": "^2.4.1",
     "passport": "^0.2.1"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0"
   }
 }
