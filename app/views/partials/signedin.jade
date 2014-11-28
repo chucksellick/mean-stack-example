@@ -1,7 +1,12 @@
 article#signedin(ng-controller="AuthController")
-  h2 Congratulations!
-  p You are signed in
-  p
-    button.btn.btn-default(type="button",ng-click="signout()") Click here to sign out
-  P
-    a(ui-sref='logapi') Click here to get the JSON feed
+  header(ng-if='authenticated')
+    h2 Congratulations!
+    p You are signed in
+    p
+      button.btn.btn-default(type="button",ng-click="signout()") Click here to sign out
+    p
+      a(ui-sref='logs') Click here to get the JSON feed
+  header(ng-if='!authenticated')
+    h2 Sorry
+    p You are not signed in
+      a(ui-sref='signin') Click here to go to the signin page

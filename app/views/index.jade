@@ -21,10 +21,21 @@ html(ng-app="SkyTestApp")
     link(href="lib/bootstrap/dist/css/bootstrap.css",rel="stylesheet")
     link(href="lib/bootstrap/dist/css/bootstrap-theme.css",rel="stylesheet")
   body
-    article#main.container
-      header.jumbotron
+    article#main.container()
+      header(ng-controller="AuthController").jumbotron()
         h1 Sky Technical test
         p Peter Hurst 28/11/2014
+        p(ng-if="authenticated")
+          span You are logged in as:
+          span {{ session.username }}
+        nav
+          ul
+            li(ng-if="!authenticated")
+              a(ui-sref='signin') Sign in
+            li(ng-if="authenticated")
+              a(ng-click='signout()') Sign out
+            li(ng-if="authenticated")
+              a(ui-sref='logs') View logs
       div#content(ui-view)
       footer
     script(src="lib/bootstrap/dist/js/bootstrap.js")
