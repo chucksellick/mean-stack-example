@@ -10,4 +10,12 @@ describe('Application', function(){
       .expect(200, done);
   });
 
+  it('Serves a partial view', function(done){
+    request(skytestApp)
+      .get('/partials/signin.html')
+      .expect('Content-Type', /text\/html/)
+      .expect(200, done);
+  });
+
+
 });
