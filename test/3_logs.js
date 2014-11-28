@@ -1,11 +1,14 @@
-var skytestApp = require('../app/application.js')()
+var dbURI = 'mongodb://localhost/skytesttest'
+  , skytestApp = require('../app/application.js')()
   , request = require('supertest')
   , authentication = require('../app/authenticationHandler.js')
   , chai = require('chai')
   , expect = chai.expect
   , should = chai.should()
   , async = require('async')
-  , authLogger = require('../app/authenticationLogger.js');
+  , mongoose = require('mongoose')
+  , authLogger = require('../app/authenticationLogger.js')
+  , clearDB  = require('mocha-mongoose')(dbURI);
 
 describe('Authentication Logs', function(){
 
@@ -47,8 +50,17 @@ describe('Authentication Logs', function(){
 
   describe('Logger', function() {
 
-    it('Does not initially have any logs', function() {
-      authLogger.list().length.should.equal(0);
+    beforeEach(function(done){
+      if (mongoose.connection.db) return done();
+      mongoose.connect(dbURI, done);
+    });
+
+    it('Does not initially have any logs', function(done) {
+      authLogger.list(function(err, result){
+        expect(err).to.not.exist;
+        result.length.should.equal(0);
+        done();
+      });
     });
 
     it('Can log an authentication attempt', function(done) {

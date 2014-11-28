@@ -4,7 +4,9 @@ var express = require('express')
   , expressJwt = require('express-jwt')
   , jwt = require('jsonwebtoken')
   , bodyParser = require('body-parser')
-  , authentication = require('./authenticationHandler');
+  , authentication = require('./authenticationHandler')
+  , mongoose = require('mongoose')
+  , AuthLogSchema = require('./models/AuthLog');
 
 module.exports = function() {
 
