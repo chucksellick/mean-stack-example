@@ -2,6 +2,11 @@ doctype html
 html(ng-app="SkyTestApp")
   head
     title Technical test for Sky
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
     script(src="lib/jquery/dist/jquery.js")
     script(src="lib/async/lib/async.js")
     script(src="lib/lodash/dist/lodash.js")
@@ -10,11 +15,13 @@ html(ng-app="SkyTestApp")
     script(src="lib/angular-ui-router/release/angular-ui-router.js")
     script(src="lib/angular-bootstrap/ui-bootstrap-tpls.js")
     script(src="application.js")
-    link(href="lib/bootstrap/dist/css/bootstrap.css")
-    link(href="lib/bootstrap/dist/css/bootstrap-theme.css")
+    link(href="lib/bootstrap/dist/css/bootstrap.css",rel="stylesheet")
+    link(href="lib/bootstrap/dist/css/bootstrap-theme.css",rel="stylesheet")
   body
-    article#main
-      header
+    article#main.container
+      header.jumbotron
         h1 Sky Technical test
+        p Peter Hurst 28/11/2014
       div#content(ui-view)
       footer
+    script(src="lib/bootstrap/dist/js/bootstrap.js")
