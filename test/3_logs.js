@@ -4,7 +4,8 @@ var skytestApp = require('../app/application.js')()
   , chai = require('chai')
   , expect = chai.expect
   , should = chai.should()
-  , async = require('async');
+  , async = require('async')
+  , authLogger = require('../app/authenticationLogger.js');
 
 describe('Authentication Logs', function(){
 
@@ -43,4 +44,21 @@ describe('Authentication Logs', function(){
     });
 
   });
+
+  describe('Logger', function() {
+
+    it('Does not initially have any logs', function() {
+      authLogger.list().length.should.equal(0);
+    });
+
+    it('Can log an authentication attempt', function(done) {
+      authLogger.log({
+        ip: '1.0.0.1',
+        success: false,
+        username: 'tester'
+      }, done);
+    });
+
+  });
+
 });
