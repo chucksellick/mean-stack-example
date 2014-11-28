@@ -1,8 +1,7 @@
 
 // Handles authentication backend
 
-var users = require('./users.js')
-  , authLogger = require('./authLogger.js');
+var users = require('./users.js');
 
 module.exports = {
 

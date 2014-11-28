@@ -40,16 +40,33 @@ module.exports = function() {
     });
   });
 
-  skytest.post('/authenticate', function (req, res) {
+  skytest.post('/authenticate', function (req, res, next) {
     // If is invalid, return 401
     authentication.authenticate(req.body.username, req.body.password, function(err, result) {
       if (err) {
-        res.status(401).send('Bad username or password');
+        authLogger.log({
+          ip: req.ip,
+          username: req.body.username,
+          success: false
+        }, function(err,result){
+          if (err)
+            return next(err);
+          res.status(401).send('Bad username or password');  
+        });
         return;
       }
       // Send the user profile inside the token
       var token = jwt.sign(result, authentication.secret, { expiresInMinutes: 60*24 });
-      res.json({ token: token });
+      // Log successful login
+      authLogger.log({
+        ip: req.ip,
+        username: req.body.username,
+        success: true
+      }, function(err,result){
+        if (err)
+          return next(err);
+        res.json({ token: token });
+      });
     });
   });
 

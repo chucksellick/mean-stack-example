@@ -1,10 +1,14 @@
-var skytestApp = require('../app/application.js')()
+var dbURI = 'mongodb://localhost/skytesttest'
+  , skytestApp = require('../app/application.js')()
   , request = require('supertest')
   , authentication = require('../app/authenticationHandler.js')
   , chai = require('chai')
   , expect = chai.expect
   , should = chai.should()
-  , async = require('async');
+  , async = require('async')
+  , mongoose = require('mongoose')
+  , authLogger = require('../app/authenticationLogger.js')
+  , clearDB  = require('mocha-mongoose')(dbURI);
 
 describe('Authentication', function(){
 
@@ -55,6 +59,11 @@ describe('Authentication', function(){
   });
 
   describe('web service', function() {
+
+    beforeEach(function(done){
+      if (mongoose.connection.db) return done();
+      mongoose.connect(dbURI, done);
+    });
 
     it('Accepts a POST and fails to authenticate', function(done){
       request(skytestApp)

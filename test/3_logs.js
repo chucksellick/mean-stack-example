@@ -210,8 +210,9 @@ describe('Authentication Logs', function(){
                 .expect(200)
                 .expect('Content-Type', /json/)
                 .end(function(err, res) {
-                  res.body.length.should.equal(2);
-                  res.body[0].Username.should.be('bob');
+                  res.body.length.should.equal(3); // Third attempt was admin
+                  res.body[0].Username.should.equal('bob');
+                  res.body[2].Username.should.equal('admin');
                   done(err, res);
                 });
             });
