@@ -25,4 +25,10 @@ angular
           $scope.error = 'Authentication failed, please check your username and password and try again';
         });
     };
+
+    $scope.signout = function() {
+      delete $sessionStorage.token;
+      $state.transitionTo('signin');
+    };
+
   }]);
