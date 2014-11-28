@@ -29,5 +29,18 @@ describe('Authentication Logs', function(){
         });
     });
 
+    it('Doesn\'t allow access to other users', function(done){
+      request(skytestApp)
+        .post('/authenticate')
+        .send({ username: 'manager', password: 'password' })
+        .end(function(err, res) {
+          var token = res.body.token;
+          request(skytestApp)
+            .get('/api/authentication-logs')
+            .set('Authorization', 'Bearer '+token)
+            .expect(401, done);
+        });
+    });
+
   });
 });

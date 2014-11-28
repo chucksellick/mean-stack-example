@@ -27,6 +27,9 @@ module.exports = function() {
 
   // Serve auth logs
   skytest.get('/api/authentication-logs', function(req,res,next) {
+    if (req.user.username !== 'admin') {
+      return res.status(401).send('Not enough privileges');
+    }
     res.json({ foo: 'bar' });
   });
 
