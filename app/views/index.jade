@@ -22,7 +22,7 @@ html(ng-app="SkyTestApp")
     link(href="lib/bootstrap/dist/css/bootstrap-theme.css",rel="stylesheet")
   body
     article#main.container()
-      header(ng-controller="AuthController").jumbotron()
+      header.jumbotron(ng-controller="AuthController")
         h1 Sky Technical test
         p Peter Hurst 28/11/2014
         p(ng-if="authenticated")
