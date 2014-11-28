@@ -67,7 +67,6 @@ describe('Authentication', function(){
       request(skytestApp)
         .post('/authenticate')
         .send({ username: 'admin', password: 'password' })
-        .expect('Content-Type', /json/)
         .expect(200)
         .expect(function(res){
           res.body.token.should.exist;

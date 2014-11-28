@@ -22,6 +22,14 @@ module.exports = function() {
     res.render('index.jade');
   });
 
+  // Restrict access to API routes except for authenticated users
+  skytest.use('/api', expressJwt({secret: authentication.secret}));
+
+  // Serve auth logs
+  skytest.get('/api/authentication-logs', function(req,res,next) {
+    res.json({ foo: 'bar' });
+  });
+
   skytest.post('/authenticate', function (req, res) {
     // If is invalid, return 401
     authentication.authenticate(req.body.username, req.body.password, function(err, result) {
