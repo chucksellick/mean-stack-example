@@ -71,6 +71,89 @@ describe('Authentication Logs', function(){
       }, done);
     });
 
+    it('Has saved the log to the database', function(done) {
+      authLogger.log({
+        ip: '1.0.0.1',
+        success: false,
+        username: 'tester'
+      }, function(err,callback){
+        authLogger.list(function(err,result){
+          expect(err).to.not.exist;
+          result.length.should.equal(1);
+          done();
+        });
+      });
+    });
+
+    it('Has saved the correct username and IP', function(done) {
+      authLogger.log({
+        ip: '1.0.0.101',
+        success: false,
+        username: 'fred'
+      }, function(err, callback){
+        authLogger.list(function(err,result){
+          result[0].Username.should.equal('fred');
+          result[0].IP.should.equal('1.0.0.101');
+          done();
+        });
+      });
+    });
+
+    it('Has set the Datetime', function(done) {
+      var then = new Date();
+      authLogger.log({
+        ip: '1.0.0.1',
+        success: false,
+        username: 'fred'
+      }, function(err,callback){
+        authLogger.list(function(err,result){
+          var now = new Date();
+          (then <= result[0].Datetime).should.be.true;
+          (now >= result[0].Datetime).should.be.true;
+          done();
+        });
+      });
+    });
+
+    it('Can save multiple logs', function(done) {
+      authLogger.log({
+        ip: '1.0.0.1',
+        success: false,
+        username: 'bob'
+      }, function(err,callback){
+        authLogger.log({
+          ip: '2.0.0.2',
+          success: true,
+          username: 'fred'
+        }, function(err,callback){
+          authLogger.list(function(err,result){
+            result.length.should.equal(2);
+            done();
+          });
+        });
+      });
+    });
+
+    it('Saves the right action values', function(done) {
+      authLogger.log({
+        ip: '1.0.0.1',
+        success: false,
+        username: 'bob'
+      }, function(err,callback){
+        authLogger.log({
+          ip: '2.0.0.2',
+          success: true,
+          username: 'fred'
+        }, function(err,callback){
+          authLogger.list(function(err,result){
+            result[0].Action.should.equal("AUTH_FAILURE");
+            result[1].Action.should.equal("AUTH_SUCCESS");
+            done();
+          });
+        });
+      });
+    });
+
   });
 
 });
