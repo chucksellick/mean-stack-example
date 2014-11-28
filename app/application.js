@@ -1,6 +1,10 @@
 var express = require('express')
   , _ = require('lodash')
-  , fs = require('fs');
+  , fs = require('fs')
+  , expressJwt = require('express-jwt')
+  , jwt = require('jsonwebtoken')
+  , bodyParser = require('body-parser')
+  , authentication = require('./authenticationHandler');
 
 module.exports = function() {
 
@@ -10,9 +14,25 @@ module.exports = function() {
   skytest.set('views', __dirname + '/views');
   skytest.set('view engine', 'jade');
 
+  skytest.use(bodyParser.json());
+  skytest.use(bodyParser.urlencoded({ extended:true }))
+
   // Serve home page
   skytest.get('/', function(req,res,next) {
     res.render('index.jade');
+  });
+
+  skytest.post('/authenticate', function (req, res) {
+    // If is invalid, return 401
+    authentication.authenticate(req.body.username, req.body.password, function(err, result) {
+      if (err) {
+        res.status(401).send('Bad username or password');
+        return;
+      }
+      // Send the user profile inside the token
+      var token = jwt.sign(result, authentication.secret, { expiresInMinutes: 60*24 });
+      res.json({ token: token });
+    });
   });
 
   _.each(fs.readdirSync(__dirname + '/views/partials'), function(file){
