@@ -1,0 +1,14 @@
+{
+  "name": "sky-technical-test",
+  "version": "0.0.1",
+  "description": "Sky technical test (Peter Hurst)",
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "angular": "~1.3.4",
+    "bootstrap": "~3.3.1",
+    "angular-ui-utils": "~0.1.1",
+    "angular-ui-router": "~0.2.13",
+    "async": "~0.9.0",
+    "lodash": "~2.4.1"
+  }
+}
