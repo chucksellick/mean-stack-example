@@ -68,6 +68,7 @@ describe('Authentication', function(){
         .post('/authenticate')
         .send({ username: 'admin', password: 'password' })
         .expect(200)
+        .expect('Content-Type', /json/)
         .expect(function(res){
           res.body.token.should.exist;
         })

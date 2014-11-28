@@ -5,6 +5,7 @@ var express = require('express')
   , jwt = require('jsonwebtoken')
   , bodyParser = require('body-parser')
   , authentication = require('./authenticationHandler')
+  , authLogger = require('./authenticationLogger')
   , mongoose = require('mongoose')
   , AuthLogSchema = require('./models/AuthLog');
 
@@ -32,7 +33,11 @@ module.exports = function() {
     if (req.user.username !== 'admin') {
       return res.status(401).send('Not enough privileges');
     }
-    res.json({ foo: 'bar' });
+    authLogger.list(function(err,result){
+      if (err)
+        return next(err);
+      res.json(result);
+    });
   });
 
   skytest.post('/authenticate', function (req, res) {

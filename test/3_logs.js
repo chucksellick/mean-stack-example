@@ -12,42 +12,6 @@ var dbURI = 'mongodb://localhost/skytesttest'
 
 describe('Authentication Logs', function(){
 
-  describe('access', function() {
-
-    it('Refuses access to unathenticated users', function(done){
-      request(skytestApp)
-        .get('/api/authentication-logs')
-        .expect(401, done);
-    });
-
-    it('Allows access to admin user', function(done){
-      request(skytestApp)
-        .post('/authenticate')
-        .send({ username: 'admin', password: 'password' })
-        .end(function(err, res) {
-          var token = res.body.token;
-          request(skytestApp)
-            .get('/api/authentication-logs')
-            .set('Authorization', 'Bearer '+token)
-            .expect(200, done);
-        });
-    });
-
-    it('Doesn\'t allow access to other users', function(done){
-      request(skytestApp)
-        .post('/authenticate')
-        .send({ username: 'manager', password: 'password' })
-        .end(function(err, res) {
-          var token = res.body.token;
-          request(skytestApp)
-            .get('/api/authentication-logs')
-            .set('Authorization', 'Bearer '+token)
-            .expect(401, done);
-        });
-    });
-
-  });
-
   describe('Logger', function() {
 
     beforeEach(function(done){
@@ -152,6 +116,108 @@ describe('Authentication Logs', function(){
           });
         });
       });
+    });
+
+    it('Logs failure when logging in via website', function(done){
+      request(skytestApp)
+        .post('/authenticate')
+        .send({ username: 'foo', password: 'bar' })
+        .end(function(err, result) {
+          authLogger.list(function(err,result){
+            result.length.should.equal(1);
+            result[0].Action.should.equal("AUTH_FAILURE");
+            result[0].Username.should.equal("foo");
+            done(err);
+          });
+        });
+    });
+
+/*
+    it('Accepts a POST and authenticates returning a token', function(done){
+      request(skytestApp)
+        .post('/authenticate')
+        .send({ username: 'admin', password: 'password' })
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function(res){
+          res.body.token.should.exist;
+        })
+        .end(done);
+    });
+*/
+  });
+
+  describe('API', function() {
+
+    beforeEach(function(done){
+      if (mongoose.connection.db) return done();
+      mongoose.connect(dbURI, done);
+    });
+
+    it('Refuses access to unathenticated users', function(done){
+      request(skytestApp)
+        .get('/api/authentication-logs')
+        .expect(401, done);
+    });
+
+    it('Allows access to admin user', function(done){
+      request(skytestApp)
+        .post('/authenticate')
+        .send({ username: 'admin', password: 'password' })
+        .end(function(err, res) {
+          var token = res.body.token;
+          request(skytestApp)
+            .get('/api/authentication-logs')
+            .set('Authorization', 'Bearer '+token)
+            .expect(200, done);
+        });
+    });
+
+    it('Doesn\'t allow access to other users', function(done){
+      request(skytestApp)
+        .post('/authenticate')
+        .send({ username: 'manager', password: 'password' })
+        .end(function(err, res) {
+          var token = res.body.token;
+          request(skytestApp)
+            .get('/api/authentication-logs')
+            .set('Authorization', 'Bearer '+token)
+            .expect(401, done);
+        });
+    });
+
+    it('Returns a list of authentication attempts', function(done){
+      // Firstly log a couple of attempts
+      authLogger.log({
+        ip: '1.0.0.1',
+        success: false,
+        username: 'bob'
+      }, function(err,callback){
+        authLogger.log({
+          ip: '2.0.0.2',
+          success: true,
+          username: 'fred'
+        }, function(err,callback){
+          // Now authenticate and call the authentication APIs
+          request(skytestApp)
+            .post('/authenticate')
+            .send({ username: 'admin', password: 'password' })
+            .end(function(err, res) {
+              var token = res.body.token;
+              request(skytestApp)
+                .get('/api/authentication-logs')
+                .set('Authorization', 'Bearer '+token)
+                .expect(200)
+                .expect('Content-Type', /json/)
+                .end(function(err, res) {
+                  res.body.length.should.equal(2);
+                  res.body[0].Username.should.be('bob');
+                  done(err, res);
+                });
+            });
+        });
+      });
+
     });
 
   });
