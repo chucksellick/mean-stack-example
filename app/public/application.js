@@ -1,5 +1,5 @@
 // Main Angular module
-var app = angular.module("SkyTestApp", ['ui.router', 'ui.bootstrap', 'ui.utils']);
+var app = angular.module("SkyTestApp", ['ui.router', 'ui.bootstrap', 'ui.utils', 'ngStorage']);
 app.
   config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     // Redirect to home view when route not found
