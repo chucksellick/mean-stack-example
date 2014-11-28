@@ -15,7 +15,7 @@ angular
           // Receive a JSON Web Token
           $sessionStorage.token = data.token;
           // Redirect to logged in page
-          $state.transitionTo('authenticated')
+          $state.transitionTo('signedin');
         })
         .error(function (data, status, headers, config) {
           // Erase any existing token
