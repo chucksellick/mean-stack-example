@@ -18,7 +18,8 @@
     "express-jwt": "^0.5.1",
     "jade": "^1.7.0",
     "jsonwebtoken": "^1.2.0",
-    "lodash": "^2.4.1"
+    "lodash": "^2.4.1",
+    "mongoose": "^3.8.19"
   },
   "devDependencies": {
     "chai": "^1.10.0",
