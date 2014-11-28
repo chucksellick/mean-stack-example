@@ -58,15 +58,21 @@ describe('Authentication', function(){
 
     it('Accepts a POST and fails to authenticate', function(done){
       request(skytestApp)
-        .post('/authenticate', { username: 'foo', password: 'bar' })
+        .post('/authenticate')
+        .send({ username: 'foo', password: 'bar' })
         .expect(401, done);
     });
 
     it('Accepts a POST and authenticates returning a token', function(done){
       request(skytestApp)
-        .post('/authenticate', { username: 'admin', password: 'password' })
+        .post('/authenticate')
+        .send({ username: 'admin', password: 'password' })
         .expect('Content-Type', /json/)
-        .expect(200, done);
+        .expect(200)
+        .expect(function(res){
+          res.body.token.should.exist;
+        })
+        .end(done);
     });
   });
 });
