@@ -1,5 +1,5 @@
-var skytestApp = require('../app/application.js')(),
-  request = require('supertest');
+var skytestApp = require('../app/application.js')()
+  , request = require('supertest');
 
 describe('Application', function(){
 
@@ -16,6 +16,5 @@ describe('Application', function(){
       .expect('Content-Type', /text\/html/)
       .expect(200, done);
   });
-
 
 });
