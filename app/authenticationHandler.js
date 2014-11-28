@@ -1,10 +1,24 @@
 
 // Handles authentication backend
 
+var users = require('./users.js');
+
 module.exports = {
 
   authenticate: function(username, password, callback) {
-    callback(new Error("Not authenticated"));
+    if (typeof username === 'undefined' || !username || typeof password === 'undefined' || !password) {
+      return callback(new Error("Missing username or password"));
+    }
+    var found = false;
+    _.each(users.list(), function(user) {
+      if (user.username.toLowerCase() === username.toLowerCase() && user.password === password) {
+        found = true;
+        callback(null, user);
+      }
+    });
+    if (!found) {
+      callback(new Error("Not authenticated"));
+    }
   },
 
   // Hard-coded secret, used for encrypting tokens. In production should come from configuration.

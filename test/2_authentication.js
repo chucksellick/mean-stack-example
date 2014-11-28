@@ -3,7 +3,8 @@ var skytestApp = require('../app/application.js')()
   , authentication = require('../app/authenticationHandler.js')
   , chai = require('chai')
   , expect = chai.expect
-  , should = chai.should();
+  , should = chai.should()
+  , async = require('async');
 
 describe('Authentication', function(){
 
@@ -21,6 +22,36 @@ describe('Authentication', function(){
       });
     });
 
+    it('Authenticates with a valid username/password', function(done){
+      authentication.authenticate('admin', 'password', function(err, result) {
+        expect(err).to.not.exist();
+        expect(result).to.exist();
+        done();
+      });
+    });
+
+    it('Authenticates all possible usernames', function(done) {
+      var users = require('../app/users.js').list();
+      async.eachSeries(users, function(user, callback){
+        authentication.authenticate(user.username, user.password, callback);
+      }, done);
+    });
+
+    it('Username should be case insensitive', function(done) {
+      authentication.authenticate('AdMiN', 'password', function(err, result) {
+        expect(err).to.not.exist();
+        expect(result).to.exist();
+        done();
+      });
+    });
+
+    it('Password should be case sensitive', function(done) {
+      authentication.authenticate('admin', 'PaSsWoRd', function(err, result) {
+        expect(err).to.exist();
+        expect(result).to.not.exist();
+        done();
+      });
+    });
   });
 
   describe('web service', function() {
@@ -31,6 +62,11 @@ describe('Authentication', function(){
         .expect(401, done);
     });
 
+    it('Accepts a POST and authenticates returning a token', function(done){
+      request(skytestApp)
+        .post('/authenticate', { username: 'admin', password: 'password' })
+        .expect('Content-Type', /json/)
+        .expect(200, done);
+    });
   });
 });
-    
