@@ -1,3 +1,7 @@
-h2 Authorise with the app
-form#signin-form
-  
+h2 Authenticate
+form#signin-form.panel.panel-default(role="form")
+  p.panel-heading Enter your authentication details
+  div.input-group.panel-body
+    input#username.form-control(type="text",placeholder="Username")
+    input#password.form-control(type="password",placeholder="Password")
+    button#submit.btn.btn-default(type="button") Authenticate
