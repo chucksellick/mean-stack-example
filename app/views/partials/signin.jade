@@ -2,6 +2,7 @@ h2 Authenticate
 form#signin-form.panel.panel-default(role="form",ng-controller="AuthController")
   p.panel-heading Enter your authentication details
   .panel-body
+    .alert.alert-danger(ng-if="error", role="alert") {{ error }}
     .input-group
       label(for="username") Username:
       input#username.form-control(type="text",ng-model="auth.username",placeholder="Enter your username")
