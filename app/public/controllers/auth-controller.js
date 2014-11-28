@@ -14,6 +14,7 @@ angular
         .success(function (data, status, headers, config) {
           // Receive a JSON Web Token
           $sessionStorage.token = data.token;
+          $sessionStorage.username
           // Redirect to logged in page
           $state.transitionTo('signedin');
         })

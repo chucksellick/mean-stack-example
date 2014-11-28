@@ -1,0 +1,6 @@
+#logs(ng-controller="LogsController", ng-init='populate()')
+  .panel
+    .panel-body
+      p.alert.alert-danger(ng-if="error", role="alert") {{ error }}
+      pre(ng-if="!error")
+        {{ json }}

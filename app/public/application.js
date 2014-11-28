@@ -12,9 +12,14 @@ app
         templateUrl: 'partials/signin.html'
       })
       .state('signedin', {
-        url: '/',
+        url: '/signed-in',
         templateUrl: 'partials/signedin.html'
+      })
+      .state('logs', {
+        url: '/logs',
+        templateUrl: 'partials/logs.html'
       });
+      
   }])
   // Set up Authorization headers once we have an authentication token
   .factory('authInterceptor', function ($q, $sessionStorage) {
@@ -33,7 +38,7 @@ app
         return response || $q.when(response);
       }
     };
-  });
+  })
   // Intercept HTTP requests with the auth token
   .config(function ($httpProvider) {
     $httpProvider.interceptors.push('authInterceptor');
